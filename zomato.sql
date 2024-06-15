@@ -97,10 +97,9 @@ on p.product_id=c.product_id
 group by userid;
 
 
----9.If buying each product generates points for eg 5rs-2 zomato point and each product has different
---purchasing points for eg for p1 5rs 1 zomato point, for p2 10rs 5zomato point and p3 5rs-1
---zomato point 2rs Izomato point
----calculate points collected by each customers and for which product most points havebeen given till now
+---9.If buying each product generates points for eg 5rs-2 zomato point and each product has differentpurchasing points for eg for p1 5rs 1 zomato point,
+  --for p2 10rs 5zomato point and p3 5rs-1 zomato point 2rs Izomato point.calculate points collected by each customers and for 
+   which product most points havebeen given till now?
  
  select userid,sum(total_points) as total_points_earned from
 (select b.*,total_price/points as total_points from
@@ -122,9 +121,9 @@ group by product_id) as f) as g
 where rnk=1;
 
 
---- 10.In the first one year after a customer joins the gold program (including their join date) 
---irrespective of what the customer has purchased they earn 5 zomato points for every 10 rs spent
---who earned more 1 or 3 and what was their points earnings in thier first yr?
+--- 10.In the first one year after a customer joins the gold program (including their join date) irrespective of what the customer has purchased 
+--they earn 5 zomato points for every 10 rs spent who earned more 1 or 3 and what was their points earnings in thier first yr?
+ 
 select d.userid,p.price*0.5 as total_points_acheived from
 (select s.userid,s.product_id,s.created_date,g.gold_signup_date from goldusers_signup as g 
 inner join sales as s
@@ -134,8 +133,7 @@ as d inner join product as p on p.product_id=d.product_id;
 --- 11. rank all the  transcations of the customers
 select *,rank() over (partition by userid order by created_date) as rnk from sales;
 
---- 12. rank all the transactions for each member whenever they are a gold member for ever
---non gold member transaction mark as na
+--- 12. rank all the transactions for each member whenever they are a gold member for ever non gold member transaction mark as na
 
 select *,case when rnk = 0 then 'na' else rnk end as rnkk from
 (select *,cast(case when gold_signup_date is null then 0 else
